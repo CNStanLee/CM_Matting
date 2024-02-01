@@ -1,0 +1,64 @@
+<mxfile host="Electron" modified="2024-02-01T12:38:52.803Z" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/23.0.2 Chrome/120.0.6099.109 Electron/28.1.0 Safari/537.36" etag="T8UI0SHOb6NGRycLVEp4" version="23.0.2" type="device">
+  <diagram name="Page-1" id="ITodtTxIqVRZnq8VY8wf">
+    <mxGraphModel dx="989" dy="600" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="-U5HOGxHpVtVUeScQTUd-23" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="-U5HOGxHpVtVUeScQTUd-1" target="-U5HOGxHpVtVUeScQTUd-2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="-U5HOGxHpVtVUeScQTUd-1" value="Input Source Image&lt;br&gt;&amp;amp; Trimap" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="120" y="40" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="-U5HOGxHpVtVUeScQTUd-24" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="-U5HOGxHpVtVUeScQTUd-2" target="-U5HOGxHpVtVUeScQTUd-4">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="-U5HOGxHpVtVUeScQTUd-2" value="RGB to Gray" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="260" y="40" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="-U5HOGxHpVtVUeScQTUd-25" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="-U5HOGxHpVtVUeScQTUd-4" target="-U5HOGxHpVtVUeScQTUd-5">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="-U5HOGxHpVtVUeScQTUd-4" value="Layer Mapping by Trimap" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="400" y="40" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="-U5HOGxHpVtVUeScQTUd-31" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="-U5HOGxHpVtVUeScQTUd-5" target="-U5HOGxHpVtVUeScQTUd-28">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="-U5HOGxHpVtVUeScQTUd-5" value="Get Mean and Cov&lt;br&gt;Value" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="540" y="40" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="-U5HOGxHpVtVUeScQTUd-35" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="-U5HOGxHpVtVUeScQTUd-6" target="-U5HOGxHpVtVUeScQTUd-9">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="-U5HOGxHpVtVUeScQTUd-6" value="Get Average Alpha Value" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="120" y="120" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="-U5HOGxHpVtVUeScQTUd-36" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="-U5HOGxHpVtVUeScQTUd-9" target="-U5HOGxHpVtVUeScQTUd-13">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="-U5HOGxHpVtVUeScQTUd-9" value="Get Alpha by Iteration" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="260" y="120" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="-U5HOGxHpVtVUeScQTUd-37" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="-U5HOGxHpVtVUeScQTUd-13" target="-U5HOGxHpVtVUeScQTUd-14">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="-U5HOGxHpVtVUeScQTUd-13" value="Implement Alpha and output the result" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="400" y="120" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="-U5HOGxHpVtVUeScQTUd-14" value="Combine the result with new background" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="540" y="120" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="-U5HOGxHpVtVUeScQTUd-28" value="" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;" vertex="1" parent="1">
+          <mxGeometry x="680" y="55" width="30" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="-U5HOGxHpVtVUeScQTUd-33" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="-U5HOGxHpVtVUeScQTUd-32" target="-U5HOGxHpVtVUeScQTUd-6">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="-U5HOGxHpVtVUeScQTUd-32" value="" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;" vertex="1" parent="1">
+          <mxGeometry x="70" y="135" width="30" height="30" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
