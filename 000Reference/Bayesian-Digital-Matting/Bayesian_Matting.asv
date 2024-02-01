@@ -140,7 +140,6 @@ NF= 0 ; NB = 0;
                 preAlpha = alpha;
                 % Iteration and calculate alpha
                 for i=1:Iteration,
-    
                     % foreground uncertainty
                     UL = invcoF + eye(3)*(alpha*alpha)/(oriVar*oriVar);
                     % transimission between fore and back uncertainty
@@ -156,10 +155,8 @@ NF= 0 ; NB = 0;
                     BU = invcoF*Fmean' + C*alpha/(oriVar*oriVar);
                     BD = invcoB*Bmean' + C*(1-alpha)/(oriVar*oriVar);
                     B = [BU; BD];
-                    % x mean matrix of F & B
                     x = A\B;
                     tempF = x(1:3); tempB = x(4:6);
-                    % α=((C-B)∙(F-B))/(||F-B||^2 )
                     alpha = dot((C - tempB), (tempF - tempB)) / norm(tempF-tempB).^2;
                     if abs(preAlpha - alpha)< 0.0001,
                         break;
