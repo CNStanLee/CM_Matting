@@ -15,17 +15,19 @@ if size(triMap,3)~=1,
    triMap = rgb2gray(triMap); 
 end
 
+% initial picture
 frontImg = double(oriImg);
 backImg = double(oriImg);
 unknownImg = double(oriImg);
+% get pic's size
 width = size(oriImg,1);
 height = size(oriImg,2);
 
-
+% loop within all the pixels
     for b= 1:height
        for a = 1:width
            for i = 1 : 3
-           
+           % classificate to F/B/U
                 if triMap(a,b)>=FThreshold,
                     backImg(a,b,i) = 0;
                     unknownImg(a,b,i)=0;
@@ -42,6 +44,7 @@ height = size(oriImg,2);
            end
        end
     end
+  % show the result
   figure,
    imshow([uint8(frontImg) uint8(backImg) uint8(unknownImg)]);
    drawnow;
