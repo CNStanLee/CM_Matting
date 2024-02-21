@@ -1,0 +1,30 @@
+function [output1, output2] = FunPreProcess()
+
+% FunPreProcess
+% This function is used for preprocessing the input image.
+% M
+% Inputs:
+%    input1 - Description
+%    input2 - Description
+% Outputs:
+%    output1 - Description
+%    output2 - Description
+% Author: ChanghongLi
+% Date : Feb 2024
+
+%------------- Begin Variable --------------
+% Revision:
+% 0.0 : First Create Changhong Lee
+
+%------------- Begin Variable --------------
+
+% Enter your Variable
+
+%------------- End Variable -----------
+
+
+%------------- Begin Code --------------
+
+% Enter your Code
+
+%------------- End Code -----------
