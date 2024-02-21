@@ -15,19 +15,17 @@ if size(triMap,3)~=1,
    triMap = rgb2gray(triMap); 
 end
 
-% initial picture
 frontImg = double(oriImg);
 backImg = double(oriImg);
 unknownImg = double(oriImg);
-% get pic's size
 width = size(oriImg,1);
 height = size(oriImg,2);
 
-% loop within all the pixels
+
     for b= 1:height
        for a = 1:width
            for i = 1 : 3
-           % classificate to F/B/U
+           
                 if triMap(a,b)>=FThreshold,
                     backImg(a,b,i) = 0;
                     unknownImg(a,b,i)=0;
@@ -44,7 +42,6 @@ height = size(oriImg,2);
            end
        end
     end
-  % show the result
   figure,
    imshow([uint8(frontImg) uint8(backImg) uint8(unknownImg)]);
    drawnow;
@@ -95,7 +92,7 @@ NF= 0 ; NB = 0;
  
     
  %%
- unknownAlpha = double(triMap) / 255.0; % map 0-255 to 0-1
+ unknownAlpha = double(triMap) / 255.0;
  unknownF = unknownImg;
  unknownB = unknownImg;
  invcoF = inv(coF);
@@ -103,10 +100,8 @@ NF= 0 ; NB = 0;
  for b=1:height
      for a=1:width
          if any(unknownImg(a,b,:)),
-                alpha = 0;  % initial alpha val
+                alpha = 0;
                 count = 0;
-                % calculate alpha value with average for smooth
-                % the points nearby this point which are unknown points
                 if(a>1&&b>1)
                    alpha = alpha + unknownAlpha(a-1,b-1);
                    count = count +1;
@@ -141,28 +136,19 @@ NF= 0 ; NB = 0;
                 end
                 alpha = alpha / count;
                 preAlpha = alpha;
-                % Iteration and calculate alpha
                 for i=1:Iteration,
-    
-                    % foreground uncertainty
-                    UL = invcoF + eye(3)*(alpha*alpha)/(oriVar*oriVar);
-                    % transimission between fore and back uncertainty
-                    UR =eye(3)*alpha*(1-alpha)/(oriVar*oriVar);
-                    % symmetric to UR
-                    DL = eye(3)*alpha*(1-alpha)/(oriVar*oriVar);
-                    % backgrounc uncertainty
-                    DR = invcoB + eye(3)*(1-alpha)*(1-alpha)/(oriVar*oriVar);
 
+                    UL = invcoF + eye(3)*(alpha*alpha)/(oriVar*oriVar);
+                    UR =eye(3)*alpha*(1-alpha)/(oriVar*oriVar);
+                    DL = eye(3)*alpha*(1-alpha)/(oriVar*oriVar);
+                    DR = invcoB + eye(3)*(1-alpha)*(1-alpha)/(oriVar*oriVar);
                     A = [UL UR;DL DR];
-                    % truth
                     C = reshape(unknownImg(a,b,:),3,1);
                     BU = invcoF*Fmean' + C*alpha/(oriVar*oriVar);
                     BD = invcoB*Bmean' + C*(1-alpha)/(oriVar*oriVar);
                     B = [BU; BD];
-                    % x mean matrix of F & B
                     x = A\B;
                     tempF = x(1:3); tempB = x(4:6);
-                    % α=((C-B)∙(F-B))/(||F-B||^2 )
                     alpha = dot((C - tempB), (tempF - tempB)) / norm(tempF-tempB).^2;
                     if abs(preAlpha - alpha)< 0.0001,
                         break;

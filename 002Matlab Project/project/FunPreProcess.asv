@@ -1,30 +1,48 @@
-function [output1, output2] = FunPreProcess()
+function [frontImg, backImg, unknownImg] = FunPreProcess(oriImage, triMap)
 
 % FunPreProcess
 % This function is used for preprocessing the input image.
-% M
+% MainProcess:
+% 1. Read Image
+% 2. Get Pic Size
 % Inputs:
-%    input1 - Description
-%    input2 - Description
+%    oriImage(file path string) - File path to the original image
+%    triMap(file path string) - File path to the trimap image
 % Outputs:
-%    output1 - Description
-%    output2 - Description
+%    frontImg(double matrix, (x, y, channel)) - front Img matrix
+%    backImg(double matrix, (x, y, channel)) - back Img matrix
+%    unkownImg(double matrix, (x, y, channel)) - unkown Img matrix
 % Author: ChanghongLi
-% Date : Feb 2024
 
 %------------- Begin Variable --------------
 % Revision:
-% 0.0 : First Create Changhong Lee
+% 0.0 : 2024/02/21 :  First Create : Changhong Lee
 
 %------------- Begin Variable --------------
 
-% Enter your Variable
+% initial picture
+frontImg = double(oriImg);
+l_backImg = double(oriImg);
+l_unknownImg = double(oriImg);
+
+%
+FThreshold = 255 * 0.95;    % threshold of trimap foreground
+BThreshold = 255 * 0.05;    % bg
 
 %------------- End Variable -----------
 
 
 %------------- Begin Code --------------
 
-% Enter your Code
+% 1. Load Tri Map
+% read the trimap to matrix
+triMapMatrix = imread(triMap);
+% if trimap is not gray format, force it to gray format
+if( size(triMapMatrix, 3) ~= 1)
+    triMapMatrix = rgb2gray(triMapMatrix);
+end
+
+
+
 
 %------------- End Code -----------
