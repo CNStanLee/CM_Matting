@@ -18,6 +18,10 @@ if isequal(File, 0) || isequal(Path, 0)
     return;
 end
 
+
+oriImg = imread(oriImg);
+triMap = imread(triMap);
+
 % Read and resize the new background to match the original image's dimensions
 newBack = imread(fullfile(Path, File));
 [height, width, ~] = size(oriImg); % Assuming oriImg is the reference for dimensions
@@ -27,6 +31,7 @@ newBack = double(newBack);
 % Blend the new background with the estimated foreground using the alpha matte
 for i = 1:3
     newBack(:, :, i) = unknownF(:, :, i) .* unknownAlpha + newBack(:, :, i) .* (1 - unknownAlpha);
+     %newBack(:,:,i) = unknownF(:,:,i).*unknownAlpha(:,:) + newBack(:,:,i).*(1-unknownAlpha(:,:));   
 end
 
 % Replace background with original image where trimap indicates definite foreground

@@ -1,4 +1,4 @@
-function alpha = calculateAlpha(C, F, B, preAlpha)
+function alpha = CalculateAlpha(C, F, B, preAlpha)
 % Calculates the alpha value for a pixel based on the estimated
 % foreground and background colors and the pixel's color.
 %
@@ -18,5 +18,5 @@ function alpha = calculateAlpha(C, F, B, preAlpha)
 alpha = dot((C - B), (F - B)) / norm(F - B)^2;
 
 % Print the calculated alpha value
-fprintf('Previous Alpha: %.4f, Updated Alpha: %.4f\n', preAlpha, alpha);
+%fprintf('Previous Alpha: %.4f, Updated Alpha: %.4f\n', preAlpha, alpha);
 end

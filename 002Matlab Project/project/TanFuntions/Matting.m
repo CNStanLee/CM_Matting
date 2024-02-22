@@ -20,9 +20,11 @@ function [unknownAlpha, unknownF, unknownB] = Matting(unknownImg, triMap, coF, c
 % 0.0 : 2024/02/21 :  First Create : Qiwen Tan
 
 % Map the trimap values from 0-255 to 0-1 for alpha matte initialization
+triMap = imread(triMap);
 unknownAlpha = double(triMap) / 255.0;
 
 % Initialize the foreground and background images
+%unknownImg = imread(unknownImg);
 unknownF = unknownImg;
 unknownB = unknownImg;
 
@@ -31,18 +33,19 @@ invcoF = inv(coF);
 invcoB = inv(coB);
 
 % Image dimensions
-[height, width, ~] = size(unknownImg);
+
+[width, height, ~] = size(unknownImg);
 
 % Loop through each pixel in the image
-for b = 1:height
-    for a = 1:width
-        if any(unknownImg(a, b, :)),
+for a = 1:width
+    for b = 1:height
+        if any(unknownImg(a, b, :))
             % Initialize variables for alpha computation
             alpha = 0;
             count = 0;
 
             % Local averaging to smooth the alpha matte
-            [alpha, count] = localAverageAlpha(a, b, alpha, count, unknownAlpha, width, height);
+            [alpha, count] = LocalAverageAlpha(a, b, alpha, count, unknownAlpha, width, height);
 
             % Initial alpha value after local averaging
             alpha = alpha / count;
@@ -50,10 +53,10 @@ for b = 1:height
 
             for iter = 1:Iteration
                 % Estimate F and B using current alpha
-                [tempF, tempB] = estimateFB(a, b, alpha, invcoF, invcoB, oriVar, Fmean, Bmean, unknownImg);
+                [tempF, tempB] = EstimateFB(a, b, alpha, invcoF, invcoB, oriVar, Fmean, Bmean, unknownImg);
                 
                 % Calculate new alpha using estimated F and B
-                alpha = calculateAlpha(reshape(unknownImg(a, b, :), [3, 1]), tempF, tempB, preAlpha);
+                alpha = CalculateAlpha(reshape(unknownImg(a, b, :), [3, 1]), tempF, tempB, preAlpha);
 
                 % Check for convergence (optional, depending on your criteria)
                 if abs(preAlpha - alpha) < 0.0001

@@ -1,4 +1,4 @@
-function mse = calculateAlphaMSE(predictedAlpha, groundTruthAlpha)
+function mse = CalculateAlphaMSE(predictedAlpha, groundTruthAlpha)
 %CALCULATEALPHAMSE Calculates the Mean Squared Error between the predicted alpha matte and the ground truth alpha matte.
 %
 % Inputs:

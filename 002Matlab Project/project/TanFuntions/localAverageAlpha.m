@@ -1,4 +1,4 @@
-function [alpha, count] = localAverageAlpha(a, b, alpha, count, unknownAlpha, width, height)
+function [alpha, count] = LocalAverageAlpha(a, b, alpha, count, unknownAlpha, width, height)
 % Calculates the local average of alpha values around a specified pixel
 % to smooth the initial alpha matte.
 %

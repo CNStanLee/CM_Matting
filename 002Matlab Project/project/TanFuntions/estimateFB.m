@@ -1,4 +1,4 @@
-function [F, B] = estimateFB(a, b, alpha, invcoF, invcoB, oriVar, Fmean, Bmean, unknownImg)
+function [F, B] = EstimateFB(a, b, alpha, invcoF, invcoB, oriVar, Fmean, Bmean, unknownImg)
 % Estimates the foreground and background colors for a pixel based on the
 % alpha value and the pixel's color.
 %
@@ -36,5 +36,5 @@ F = x(1:3);
 B = x(4:6);
 
 % Print the estimated foreground and background
-fprintf('Estimated Foreground: [%f, %f, %f], Estimated Background: [%f, %f, %f]\n', F, B);
+%fprintf('Estimated Foreground: [%f, %f, %f], Estimated Background: [%f, %f, %f]\n', F, B);
 end
