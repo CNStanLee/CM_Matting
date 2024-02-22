@@ -21,6 +21,9 @@ function [unknownAlpha, unknownF, unknownB] = Matting(unknownImg, triMap, coF, c
 
 % Map the trimap values from 0-255 to 0-1 for alpha matte initialization
 triMap = imread(triMap);
+if size(triMap,3)~=1
+   triMap = rgb2gray(triMap); 
+end
 unknownAlpha = double(triMap) / 255.0;
 
 % Initialize the foreground and background images

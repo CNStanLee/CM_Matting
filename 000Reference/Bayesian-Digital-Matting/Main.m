@@ -1,6 +1,6 @@
 clear all;
-figure;
-imshow('teddy.jpg');
+% figure;
+% imshow('teddy.jpg');
 Bayesian_Matting ( 8,10,'teddy.jpg','trimapT.png');
 
 

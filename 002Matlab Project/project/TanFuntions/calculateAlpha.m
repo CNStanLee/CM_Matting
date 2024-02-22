@@ -17,6 +17,8 @@ function alpha = CalculateAlpha(C, F, B, preAlpha)
 % Calculate the new alpha value
 alpha = dot((C - B), (F - B)) / norm(F - B)^2;
 
+% alpha = dot((C - tempB), (tempF - tempB)) / norm(tempF-tempB).^2;
+
 % Print the calculated alpha value
 %fprintf('Previous Alpha: %.4f, Updated Alpha: %.4f\n', preAlpha, alpha);
 end

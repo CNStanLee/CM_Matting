@@ -14,6 +14,8 @@ function [alpha, count] = LocalAverageAlpha(a, b, alpha, count, unknownAlpha, wi
 %   count - The updated count of neighboring pixels considered.
 
 % Iterate over the 3x3 neighborhood centered at (a, b)
+% calculate alpha value with average for smooth
+% the points nearby this point which are unknown points
 for x = max(a-1, 1):min(a+1, width)
     for y = max(b-1, 1):min(b+1, height)
         if ~(x == a && y == b) % Exclude the center pixel
@@ -22,4 +24,4 @@ for x = max(a-1, 1):min(a+1, width)
         end
     end
 end
-end
+

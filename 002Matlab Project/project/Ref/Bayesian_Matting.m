@@ -178,7 +178,8 @@ NF= 0 ; NB = 0;
      end 
  end
  
-% imshow(uint8(unknownAlpha));
+
+
  %%
  [File,Path,Index]=  uigetfile({'*.jpg;*.jpeg;*.png;*.gif;*.bmp;*.tiff','Image Files (.jpg, .png, .gif, .bmp, .tiff'},'Select an new Background ');
  newBack = imread([Path File]);
@@ -187,7 +188,7 @@ NF= 0 ; NB = 0;
  for i=1:3
  newBack(:,:,i) = unknownF(:,:,i).*unknownAlpha(:,:) + newBack(:,:,i).*(1-unknownAlpha(:,:));   
  end
- 
+
  for a=1:width
      for b=1:height
         if(triMap(a,b)>=FThreshold)
@@ -199,6 +200,6 @@ NF= 0 ; NB = 0;
  imshow(uint8(newBack));
  imwrite(uint8(newBack),'Bear.png')
  drawnow;
- 
+
 end
 

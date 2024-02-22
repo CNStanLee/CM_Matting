@@ -1,4 +1,4 @@
-function GiveNewBackground(oriImg, triMap, unknownF, unknownAlpha, FThreshold)
+function GiveNewBackground(oriImg, triMap, unknownF, unknownAlpha, FThreshold, BgPath)
 %BLENDWITHNEWBACKGROUND Allows the user to select a new background and blends it with the original image's foreground.
 %
 % Inputs:
@@ -12,18 +12,20 @@ function GiveNewBackground(oriImg, triMap, unknownF, unknownAlpha, FThreshold)
 % 0.0 : 2024/02/21 :  First Create : Qiwen Tan
 
 % Prompt the user to select a new background image
-[File, Path] = uigetfile({'*.jpg;*.jpeg;*.png;*.gif;*.bmp;*.tiff', 'Image Files (.jpg, .jpeg, .png, .gif, .bmp, .tiff)'}, 'Select a new Background');
-if isequal(File, 0) || isequal(Path, 0)
-    disp('User canceled the operation.');
-    return;
-end
+% [File, Path] = uigetfile({'*.jpg;*.jpeg;*.png;*.gif;*.bmp;*.tiff', 'Image Files (.jpg, .jpeg, .png, .gif, .bmp, .tiff)'}, 'Select a new Background');
+% if isequal(File, 0) || isequal(Path, 0)
+%     disp('User canceled the operation.');
+%     return;
+% end
 
 
 oriImg = imread(oriImg);
 triMap = imread(triMap);
 
+
 % Read and resize the new background to match the original image's dimensions
-newBack = imread(fullfile(Path, File));
+%newBack = imread(fullfile(Path, File));
+newBack = imread(BgPath);
 [height, width, ~] = size(oriImg); % Assuming oriImg is the reference for dimensions
 newBack = imresize(newBack, [height, width]);
 newBack = double(newBack);
