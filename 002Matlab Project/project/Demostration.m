@@ -8,7 +8,7 @@ clc;
 oriImg = 'origin.png';
 triMap = 'trimapOrigin.png';
 BgPath = "WhiteBg.png";
-Iteration = 100; % USER INPUT %
+Iteration = 10; % USER INPUT %
 oriVar    = 10;  % USER INPUT %
 
 
@@ -44,20 +44,10 @@ disp(Bmean);
     triMap, coF, coB, Fmean, Bmean, oriVar, Iteration);
 
 figure,
-imshow([uint8(unknownAlpha*255)]);
-%%
-%close all;
-%mat_ori_Img = imread(oriImg);
-%figure;
-%imshow(mat_ori_Img);
-%figure;
-%imshow(unknownAlpha*255);
-%result = double(mat_ori_Img) .* unknownAlpha*255;
-%figure;
-%imshow(result);
-%figure;
-%imshow(unknownF);
-%%
+imshow(uint8(unknownAlpha*255));
 
-GiveNewBackground(oriImg, triMap, unknownF, unknownAlpha, FThreshold, BgPath);
+m_newBack = GiveNewBackground(oriImg, triMap, unknownF, unknownAlpha, FThreshold, BgPath);
+% Display and save the result
+figure;
+imshow(uint8(m_newBack));
 
