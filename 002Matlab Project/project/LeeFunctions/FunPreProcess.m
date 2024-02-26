@@ -46,7 +46,9 @@ height = size(oriImgMatrix,2);
 % 1. Convert Trimap Matrix from rgb to gray if needed
 
 % if trimap is not gray format, force it to gray format
-if( size(triMapMatrix, 3) ~= 1)
+triMapMatrix_size = size(triMapMatrix);
+dimension = numel(triMapMatrix_size);
+if(dimension == 3)
     triMapMatrix = rgb2gray(triMapMatrix);
 end
 

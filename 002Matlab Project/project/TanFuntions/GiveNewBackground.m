@@ -1,4 +1,4 @@
-function GiveNewBackground(oriImg, triMap, unknownF, unknownAlpha, FThreshold, BgPath)
+function [newBack] = GiveNewBackground(oriImg, triMap, unknownF, unknownAlpha, FThreshold, BgPath)
 %BLENDWITHNEWBACKGROUND Allows the user to select a new background and blends it with the original image's foreground.
 %
 % Inputs:
@@ -7,9 +7,11 @@ function GiveNewBackground(oriImg, triMap, unknownF, unknownAlpha, FThreshold, B
 %   unknownF - The estimated foreground image.
 %   unknownAlpha - The refined alpha matte.
 %   FThreshold - The threshold for determining definite foreground in the trimap.
-%
+% Outputs
+%   newBack (uint8 matrix) - The image with new background
 % Revision:
 % 0.0 : 2024/02/21 :  First Create : Qiwen Tan
+% 0.1 : 2024/02/26 :  Add return image : Changhong Li
 
 % Prompt the user to select a new background image
 % [File, Path] = uigetfile({'*.jpg;*.jpeg;*.png;*.gif;*.bmp;*.tiff', 'Image Files (.jpg, .jpeg, .png, .gif, .bmp, .tiff)'}, 'Select a new Background');
@@ -24,31 +26,32 @@ triMap = imread(triMap);
 
 
 % Read and resize the new background to match the original image's dimensions
-%newBack = imread(fullfile(Path, File));
-newBack = imread(BgPath);
+%m_newBack = imread(fullfile(Path, File));
+m_newBack = imread(BgPath);
 [height, width, ~] = size(oriImg); % Assuming oriImg is the reference for dimensions
-newBack = imresize(newBack, [height, width]);
-newBack = double(newBack);
+m_newBack = imresize(m_newBack, [height, width]);
+m_newBack = double(m_newBack);
 
 % Blend the new background with the estimated foreground using the alpha matte
 for i = 1:3
-    newBack(:, :, i) = unknownF(:, :, i) .* unknownAlpha + newBack(:, :, i) .* (1 - unknownAlpha);
-     %newBack(:,:,i) = unknownF(:,:,i).*unknownAlpha(:,:) + newBack(:,:,i).*(1-unknownAlpha(:,:));   
+    m_newBack(:, :, i) = unknownF(:, :, i) .* unknownAlpha + m_newBack(:, :, i) .* (1 - unknownAlpha);
+     %m_newBack(:,:,i) = unknownF(:,:,i).*unknownAlpha(:,:) + m_newBack(:,:,i).*(1-unknownAlpha(:,:));   
 end
 
 % Replace background with original image where trimap indicates definite foreground
 for a = 1:width
     for b = 1:height
         if triMap(b, a) >= FThreshold
-            newBack(b, a, :) = oriImg(b, a, :);
+            m_newBack(b, a, :) = oriImg(b, a, :);
         end
     end
 end
 
 % Display and save the result
-figure;
-imshow(uint8(newBack));
-imwrite(uint8(newBack), 'BlendedImage.png'); % Changed filename to be more generic
-drawnow;
-
+% figure;
+% imshow(uint8(m_newBack));
+% imwrite(uint8(m_newBack), 'BlendedImage.png'); % Changed filename to be more generic
+% drawnow;
+% m_newBack = m_newBack * 255;
+newBack = uint8(m_newBack);
 end
