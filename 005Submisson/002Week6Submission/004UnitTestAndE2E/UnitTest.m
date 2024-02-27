@@ -20,3 +20,7 @@ result2 = run(FunStatisticalAnalysisUnitTest);
 % Unit Test FunStatisticalAnalysis
 % -------------------------------------------------
 result3 = run(MattingUnitTest);
+% -------------------------------------------------
+% Unit Test FunStatisticalAnalysis
+% -------------------------------------------------
+result4 = run(GiveNewBackgroundUnitTest);

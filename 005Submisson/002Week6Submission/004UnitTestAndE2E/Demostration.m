@@ -50,8 +50,13 @@ save("MattingResult", 'unknownAlpha', "unknownF", "unknownB");
 figure(1);
 imshow(uint8(unknownAlpha * 255));
 
+save("BackInput", 'oriImg', "triMap", "unknownF", "unknownAlpha", ...
+    "FThreshold", "BgPath");
+
 m_newBack = GiveNewBackground(oriImg, triMap, unknownF, ...
     unknownAlpha, FThreshold, BgPath);
+
+save("BackResult", "m_newBack");
 % Display and save the result
 figure(2);
 imshow(uint8(m_newBack));

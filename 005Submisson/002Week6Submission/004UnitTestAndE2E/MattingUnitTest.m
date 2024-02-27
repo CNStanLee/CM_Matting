@@ -12,6 +12,19 @@ classdef MattingUnitTest < matlab.unittest.TestCase
             verifyEqual(testCase, munknownAlpha, unknownAlpha);
             verifyEqual(testCase, munknownF, unknownF);
             verifyEqual(testCase, munknownB, unknownB);
+
+            figure('Name', 'testGeneratenAlpha');
+            imshow(munknownAlpha);
+            fprintf('testMattingResult : need mannual check image part\n');
+
+            figure('Name', 'testGenerateunknownF');
+            imshow(munknownF);
+            fprintf('testMattingResult : need mannual check image part\n');
+
+            figure('Name', 'testGenerateunknownB');
+            imshow(munknownB);
+            fprintf('testMattingResult : need mannual check image part\n');
+
         end
 
     end
