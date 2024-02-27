@@ -21,7 +21,7 @@ function mse = CalculateAlphaMSE(predictedAlphaFile, groundTruthAlphaFile)
 predictedAlpha = imread(predictedAlphaFile);
 
 groundTruthAlpha = imread(groundTruthAlphaFile);
- 
+groundTruthAlpha = im2gray(groundTruthAlpha);
 % Ensure the alpha mattes are in the correct format
 
 predictedAlpha = double(predictedAlpha) / 255;
