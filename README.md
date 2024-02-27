@@ -43,3 +43,4 @@ The resources below are cited in this project.
 * [A_Bayesian_approach_to_digital_matting](https://ieeexplore.ieee.org/abstract/document/990970)
 * [A_Closed-Form_Solution_to_Natural_Image_Matting](https://ieeexplore.ieee.org/abstract/document/4359322)
 * [AlphaMattingWebsite](http://www.alphamatting.com/)
+* [MatlabLintTools](http://dirac.mee.tcd.ie/matlab_check.php)

@@ -5,7 +5,7 @@ This project is built for baysian matting with matlab.
 ### 1. Clone the project to your own path
 * clone the project
   ```sh
-  npm install npm@latest -g
+  git clone https://github.com/CNStanLee/CM_Matting.git
   ```
 ### 2. CD to 002Matlab Project\project path
 ### 3. (*IMPORTANT*) Add to path
