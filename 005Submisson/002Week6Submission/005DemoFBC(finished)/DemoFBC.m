@@ -13,12 +13,12 @@ fprintf("F = \n");
 disp(F);
 fprintf("B = \n");
 disp(B);
-%%
+%
 % Demo F, B, -> alpha
 % clear all data
-clc;
-clear;
-close all;
+% clc;
+% clear;
+% close all;
 
 load('CalculateAlpha_Inputs_Iter1_Pos(38,364).mat');
 

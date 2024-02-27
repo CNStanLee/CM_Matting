@@ -1,0 +1,24 @@
+classdef MattingUnitTest < matlab.unittest.TestCase
+
+    methods (Test)
+
+        function testFSAFmean(testCase)
+            load("MattingInput", 'unknownImg', "triMap", "coF", "coB", ...
+    "Fmean", "Bmean", "oriVar", "Iteration");
+            load("eMattingResult", 'eunknownAlpha', "eunknownF", "eunknownB");
+            [unknownAlpha, unknownF, unknownB] = Matting(unknownImg, ...
+    triMap, coF, coB, Fmean, Bmean, oriVar, Iteration);
+            % Add assertions here to validate the results
+            verifyEqual(testCase, unknownAlpha, unknownAlpha);
+            verifyEqual(testCase, unknownF, unknownAlpha);
+            verifyEqual(testCase, unknownAlpha, unknownAlpha);
+
+
+
+
+
+
+        end
+
+    end
+end

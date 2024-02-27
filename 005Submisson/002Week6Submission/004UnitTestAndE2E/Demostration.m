@@ -31,8 +31,8 @@ FThreshold = 255 * 0.95;
 % Test FunStatistical Analysis Unit Test (Partitial)
 % -------------------------------------------------
 [Fmean, Bmean, coF, coB] = FunStatisticalAnalysis(frontImg, backImg);
-disp(Fmean);
-disp(Bmean);
+%disp(Fmean);
+%disp(Bmean);
 %disp(coF);
 %disp(coB);
 % -------------------------------------------------
@@ -40,9 +40,12 @@ disp(Bmean);
 % -------------------------------------------------
 % INPUT
 % user input Iteration times
+save("MattingInput", 'unknownImg', "triMap", "coF", "coB", ...
+    "Fmean", "Bmean", "oriVar", "Iteration");
 
 [unknownAlpha, unknownF, unknownB] = Matting(unknownImg, ...
     triMap, coF, coB, Fmean, Bmean, oriVar, Iteration);
+save("MattingResult", 'unknownAlpha', "unknownF", "unknownB");
 
 figure(1);
 imshow(uint8(unknownAlpha * 255));

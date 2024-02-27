@@ -6,12 +6,14 @@ classdef FunPreProcessUnitTest < matlab.unittest.TestCase
             oriImg = 'origin.png';
             triMap = 'trimapOrigin.png';
             %targetImg = 'expected_front.jpg';
-            [frontImg, backImg, unknownImg] = FunPreProcess(oriImg, triMap);
+            [frontImg] = FunPreProcess(oriImg, triMap);
             % Add assertions here to validate the results
             expectedSize = size(imread(oriImg));
             verifyEqual(testCase, size(frontImg), expectedSize);
             imwrite(frontImg, 'front.jpg', 'jpg');
             %verifyEqual(testCase, frontImg, double(imread(targetImg)));
+            figure('Name', 'testGeneratefrontImg');
+            imshow(frontImg);
             fprintf('testGeneratefrontImg : need mannual check image part\n');
             %save("FunPreProcessData", 'frontImg', 'backImg', 'unknownImg');
         end
@@ -26,6 +28,8 @@ classdef FunPreProcessUnitTest < matlab.unittest.TestCase
             verifyEqual(testCase, size(backImg), expectedSize);
             %verifyEqual(testCase, backImg, double(imread(targetImg)));
             imwrite(backImg, 'back.jpg', 'jpg');
+            figure('Name', 'testGeneratebackImg');
+            imshow(backImg);
             fprintf('testGeneratebackImg : need mannual check image part\n');
         end
 
@@ -39,6 +43,8 @@ classdef FunPreProcessUnitTest < matlab.unittest.TestCase
             verifyEqual(testCase, size(unknownImg), expectedSize);
             %verifyEqual(testCase, unknownImg, double(imread(targetImg)));
             imwrite(unknownImg, 'unkown.jpg', 'jpg');
+            figure('Name', 'testGenerateunknownImg');
+            imshow(unknownImg);
             fprintf('testGenerateunknownImg : need mannual check image part\n');
         end
 
@@ -50,6 +56,9 @@ classdef FunPreProcessUnitTest < matlab.unittest.TestCase
             % Add assertions here to validate the results
             expectedSize = size(imread(oriImg));
             verifyEqual(testCase, size(unknownImg), expectedSize);
+            figure('Name', 'testGrayMapInput');
+            imshow(unknownImg);
+            fprintf('testGrayMapInput : need mannual check image part\n');
             %verifyEqual(testCase, unknownImg, double(imread(targetImg)));
         end
     end

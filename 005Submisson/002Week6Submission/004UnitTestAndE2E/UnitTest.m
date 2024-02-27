@@ -16,3 +16,7 @@ result = run(FunPreProcessUnitTest);
 % Unit Test FunStatisticalAnalysis
 % -------------------------------------------------
 result2 = run(FunStatisticalAnalysisUnitTest);
+% -------------------------------------------------
+% Unit Test FunStatisticalAnalysis
+% -------------------------------------------------
+result3 = run(MattingUnitTest);
