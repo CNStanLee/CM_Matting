@@ -1,3 +1,4 @@
+% Linted
 clear;
 close all;
 clc;
@@ -8,14 +9,14 @@ clc;
 % INPUT
 oriImg = 'origin.png';
 triMap = 'trimapOrigin.png';
-figure;
+figure(1);
 imshow(oriImg);
-figure;
+figure(2);
 imshow(triMap);
 % DUT
 [frontImg, backImg, unknownImg] = FunPreProcess(oriImg, triMap);
 % BENCH
-figure;
+figure(3);
 imshow([uint8(frontImg) uint8(backImg) uint8(unknownImg)]);
 drawnow;
 %% Test FunStatistical Analysis Unit Test (Partitial)
@@ -25,13 +26,13 @@ clc;
 % INPUT
 oriImg = 'origin.png';
 triMap = 'trimapOrigin.png';
-figure;
+figure(4);
 imshow(oriImg);
-figure;
+figure(5);
 imshow(triMap);
 [frontImg, backImg, unknownImg] = FunPreProcess(oriImg, triMap);
 % DUT
-[coF,coB] = FunStatisticalAnalysis(frontImg, backImg);
+[coF, coB] = FunStatisticalAnalysis(frontImg, backImg);
 % BENCH
 disp(coF);
 disp(coB);
