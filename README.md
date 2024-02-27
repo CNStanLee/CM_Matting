@@ -1,5 +1,13 @@
 # CM_Matting
 Computational Method Matting Project
+
+
+## Project Link
+* project link [CM_Matting](https://github.com/CNStanLee/CM_Matting.git)
+  ```sh
+  git clone https://github.com/CNStanLee/CM_Matting.git
+  ```
+
 ## Project Structure
 ### 000Reference
 Reference the project use
