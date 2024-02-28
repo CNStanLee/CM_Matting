@@ -9,7 +9,7 @@ clc;
 oriImg = 'origin.png';
 triMap = 'trimapOrigin.png';
 BgPath = "WhiteBg.png";
-Iteration = 10; % USER INPUT %
+Iteration = 5; % USER INPUT %
 oriVar = 10;  % USER INPUT %
 
 
@@ -17,10 +17,10 @@ oriVar = 10;  % USER INPUT %
 FThreshold = 255 * 0.95;
 
 
-% figure;
-% imshow(oriImg);
-% figure;
-% imshow(triMap);
+figure(1);
+imshow(oriImg);
+figure(2);
+imshow(triMap);
 % DUT
 [frontImg, backImg, unknownImg] = FunPreProcess(oriImg, triMap);
 % BENCH
@@ -44,12 +44,12 @@ disp(Bmean);
 [unknownAlpha, unknownF, unknownB] = Matting(unknownImg, ...
     triMap, coF, coB, Fmean, Bmean, oriVar, Iteration);
 
-figure(1);
+figure(3);
 imshow(uint8(unknownAlpha * 255));
 
 m_newBack = GiveNewBackground(oriImg, triMap, unknownF, ...
     unknownAlpha, FThreshold, BgPath);
 % Display and save the result
-figure(2);
+figure(4);
 imshow(uint8(m_newBack));
 
