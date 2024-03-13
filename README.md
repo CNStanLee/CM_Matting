@@ -26,6 +26,13 @@ Sorted Version files for submission
 Update the slides for week 4 in the 005Submisson folder
 ### Changhong 2024/02/27
 Update Readme file for the demostration on 2024/02/29
+### Changhong 2024/03/13
+1. Update the readme file of the python project and whole project
+2. Split the functions to the python file could be called by the jupyter
+3. Add docstring to the python function
+4. Add Time and memory estimation of the script
+5. Add basic Unitest for the function blocks 
+6. Add requirements.txt for deps
 
 
 <!-- LICENSE -->

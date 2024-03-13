@@ -1,0 +1,194 @@
+import cv2
+import numpy as np
+from matplotlib import pyplot as plt
+import time
+from memory_profiler import profile
+import psutil
+import os
+import tracemalloc
+# ------------- function define  ---------------------- #
+def compute_mean_cov(frontImg, backImg, unknownImg, width, height):
+    """
+    Compute the mean and covariance matrices for foreground and background.
+
+    Parameters:
+    frontImg (numpy.ndarray): The image representing the foreground.
+    backImg (numpy.ndarray): The image representing the background.
+    unknownImg (numpy.ndarray): The image representing the unknown region.
+    width (int): The width of the images.
+    height (int): The height of the images.
+
+    Returns:
+    tuple: A tuple containing:
+        Fmean (numpy.ndarray): Mean vector for foreground.
+        Bmean (numpy.ndarray): Mean vector for background.
+        coF (numpy.ndarray): Covariance matrix for foreground.
+        coB (numpy.ndarray): Covariance matrix for background.
+    """
+    # Initialize avg and cov matrix
+    Fmean = np.zeros(3)
+    Bmean = np.zeros(3)
+    Umean = np.zeros(3)
+    coF = np.zeros((3, 3))
+    coB = np.zeros((3, 3))
+    NF = 0
+    NB = 0
+    # calculate foreground avg
+    for i in range(3):
+        temp = frontImg[:, :, i]
+        Fmean[i] = np.mean(temp[temp > 0])
+    # calculate background avg
+    for i in range(3):
+        temp = backImg[:, :, i]
+        Bmean[i] = np.mean(temp[temp > 0])
+    # calculate covariance of foreground and background
+    for b in range(height):
+        for a in range(width):
+            if np.any(frontImg[a, b, :]):
+                shiftF = frontImg[a, b, :] - Fmean
+                coF += np.outer(shiftF, shiftF)
+                NF += 1
+            if np.any(backImg[a, b, :]):
+                shiftB = backImg[a, b, :] - Bmean
+                coB += np.outer(shiftB, shiftB)
+                NB += 1
+    coF /= NF
+    coB /= NB
+    return Fmean, Bmean, coF, coB
+
+def update_alpha(unknownImg, triMap, Fmean, Bmean, coF, coB, oriVar, Iteration, width, height):
+    """
+    Update the alpha matte based on the given inputs.
+
+    Parameters:
+    unknownImg (numpy.ndarray): The image representing the unknown region.
+    triMap (numpy.ndarray): The trimap.
+    Fmean (numpy.ndarray): Mean vector for foreground.
+    Bmean (numpy.ndarray): Mean vector for background.
+    coF (numpy.ndarray): Covariance matrix for foreground.
+    coB (numpy.ndarray): Covariance matrix for background.
+    oriVar (float): Original variance.
+    Iteration (int): The number of iterations for updating alpha.
+    width (int): The width of the images.
+    height (int): The height of the images.
+
+    Returns:
+    tuple: A tuple containing:
+        unknownAlpha (numpy.ndarray): The updated alpha matte.
+        unknownF (numpy.ndarray): The updated foreground image.
+        unknownB (numpy.ndarray): The updated background image.
+    """
+    unknownAlpha = triMap.astype(float) / 255.0
+    invcoF = np.linalg.inv(coF)
+    invcoB = np.linalg.inv(coB)
+    unknownF = np.zeros_like(unknownImg)
+    unknownB = np.zeros_like(unknownImg)
+    
+    for b in range(height):
+        for a in range(width):
+            if np.any(unknownImg[a, b, :]):
+                # Intialize alpha from surrounding alpha avg estimation
+                alpha = np.mean(unknownAlpha[max(a-1, 0):min(a+2, width), max(b-1, 0):min(b+2, height)])
+                preAlpha = alpha
+                # alpha = unknownAlpha[a, b]
+                # preAlpha = alpha
+                
+                for i in range(Iteration):
+                    C = unknownImg[a, b, :]
+                    UL = invcoF + np.eye(3) * (alpha ** 2) / (oriVar ** 2)
+                    UR = np.eye(3) * alpha * (1 - alpha) / (oriVar ** 2)
+                    DL = np.eye(3) * alpha * (1 - alpha) / (oriVar ** 2)
+                    DR = invcoB + np.eye(3) * ((1 - alpha) ** 2) / (oriVar ** 2)
+                    A = np.block([[UL, UR], [DL, DR]])
+                    BU = np.dot(invcoF, Fmean) + C * alpha / (oriVar ** 2)
+                    BD = np.dot(invcoB, Bmean) + C * (1 - alpha) / (oriVar ** 2)
+                    B = np.concatenate([BU, BD])
+                    x = np.linalg.solve(A, B)
+                    tempF = x[:3]
+                    tempB = x[3:]
+                    alpha = np.dot((C - tempB), (tempF - tempB)) / np.linalg.norm(tempF - tempB) ** 2
+                    
+                    # threshold to end the iteration
+                    if abs(preAlpha - alpha) < 0.0001:
+                        break
+                    preAlpha = alpha
+                
+                # upgrade fore back alpha map
+                unknownF[a, b, :] = tempF
+                unknownB[a, b, :] = tempB
+                unknownAlpha[a, b] = alpha
+    
+    return unknownAlpha, unknownF, unknownB
+
+
+def bayesian_matting(image_path, trimap_path, oriVar=8, Iteration=10):
+    """
+    Perform Bayesian matting to compute alpha matte from the given image and trimap.
+
+    Parameters:
+    image_path (str): The path to the input image.
+    trimap_path (str): The path to the trimap image.
+    oriVar (float): Original variance for alpha matte computation (default is 8).
+    Iteration (int): Number of iterations for alpha matte refinement (default is 10).
+
+    Returns:
+    numpy.ndarray: The computed alpha matte as a 2D numpy array.
+    """
+    oriImg = cv2.imread(image_path)
+    triMap = cv2.imread(trimap_path, cv2.IMREAD_GRAYSCALE)
+    if oriImg is None or triMap is None:
+        raise ValueError("Image or trimap path is invalid.")
+
+    FThreshold = 255 * 0.95
+    BThreshold = 255 * 0.05
+    width, height = triMap.shape
+
+    triMap_expanded = np.expand_dims(triMap, axis=-1)
+    frontImg = np.where(triMap_expanded >= FThreshold, oriImg, 0).astype(float)
+    backImg = np.where(triMap_expanded <= BThreshold, oriImg, 0).astype(float)
+    unknownImg = np.where((triMap_expanded > BThreshold) & (triMap_expanded < FThreshold), oriImg, 0).astype(float)
+
+    Fmean, Bmean, coF, coB = compute_mean_cov(frontImg, backImg, unknownImg, width, height)
+    unknownAlpha, _, _ = update_alpha(unknownImg, triMap, Fmean, Bmean, coF, coB, oriVar, Iteration, width, height)
+
+    AlphaMap = (unknownAlpha * 255).astype(np.uint8)
+    return AlphaMap
+
+def show_foreground_with_threshold(image_path, trimap_path, threshold):
+    """
+    Display the foreground of an image based on the given trimap and threshold.
+
+    Parameters:
+    image_path (str): The path to the input image.
+    trimap_path (str): The path to the trimap image.
+    threshold (float): The threshold value to determine the foreground (0 to 1).
+
+    Returns:
+    None
+    """
+    # load figure and trimap
+    image = cv2.imread(image_path)
+    trimap = cv2.imread(trimap_path, cv2.IMREAD_GRAYSCALE)
+
+    # ensure alpha_map is float and range from 0 - 1
+    alpha_map = trimap.astype(float) / 255.0
+
+    # initialize background as black
+    final_image = np.zeros_like(image)
+
+    # set pixel as foreground when alpha > threshold
+    foreground_mask = alpha_map >= threshold
+
+    # copy foreground pixel from original pic to the result pic
+    for c in range(3):  # vary each channel
+        final_image[:, :, c] = image[:, :, c] * foreground_mask
+
+    # transfer the image from BGR to RGB to display
+    final_image_rgb = cv2.cvtColor(final_image, cv2.COLOR_BGR2RGB)
+
+    # show the figure with matplotlib
+    plt.figure(figsize=(6, 6))
+    plt.imshow(final_image_rgb)
+    plt.title("Foreground with Threshold")
+    plt.axis('off')
+    plt.show()
