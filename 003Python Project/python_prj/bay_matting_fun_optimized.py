@@ -86,42 +86,47 @@ def update_alpha(unknownImg, triMap, Fmean, Bmean, coF, coB, oriVar, Iteration, 
     unknownAlpha = triMap.astype(float) / 255.0
     invcoF = np.linalg.inv(coF)
     invcoB = np.linalg.inv(coB)
+ 
+    # Vectorized approach to initialize foreground and background
     unknownF = np.zeros_like(unknownImg)
     unknownB = np.zeros_like(unknownImg)
+ 
+    # Pre-compute constants for the equations
+    inv_oriVar_square = 1.0 / (oriVar ** 2)
+    eye3 = np.eye(3)
     
-    for b in range(height):
-        for a in range(width):
-            if np.any(unknownImg[a, b, :]):
-                # Intialize alpha from surrounding alpha avg estimation
-                # alpha = np.mean(unknownAlpha[max(a-1, 0):min(a+2, width), max(b-1, 0):min(b+2, height)])
-                # preAlpha = alpha
-                alpha = unknownAlpha[a, b]
-                preAlpha = alpha
-                
-                for i in range(Iteration):
-                    C = unknownImg[a, b, :]
-                    UL = invcoF + np.eye(3) * (alpha ** 2) / (oriVar ** 2)
-                    UR = np.eye(3) * alpha * (1 - alpha) / (oriVar ** 2)
-                    DL = np.eye(3) * alpha * (1 - alpha) / (oriVar ** 2)
-                    DR = invcoB + np.eye(3) * ((1 - alpha) ** 2) / (oriVar ** 2)
-                    A = np.block([[UL, UR], [DL, DR]])
-                    BU = np.dot(invcoF, Fmean) + C * alpha / (oriVar ** 2)
-                    BD = np.dot(invcoB, Bmean) + C * (1 - alpha) / (oriVar ** 2)
-                    B = np.concatenate([BU, BD])
-                    x = np.linalg.solve(A, B)
-                    tempF = x[:3]
-                    tempB = x[3:]
-                    alpha = np.dot((C - tempB), (tempF - tempB)) / np.linalg.norm(tempF - tempB) ** 2
-                    
-                    # threshold to end the iteration
-                    if abs(preAlpha - alpha) < 0.0001:
-                        break
-                    preAlpha = alpha
-                
-                # upgrade fore back alpha map
-                unknownF[a, b, :] = tempF
-                unknownB[a, b, :] = tempB
-                unknownAlpha[a, b] = alpha
+    # Only work on unknown pixels
+    unknown_pixels = np.nonzero((triMap > 0.95) & (triMap < 0.05))
+ 
+    for a, b in zip(*unknown_pixels):
+        # Initialize alpha based on the trimap
+        alpha = unknownAlpha[a, b]
+        preAlpha = alpha
+        
+        C = unknownImg[a, b, :]
+        
+        for i in range(Iteration):
+            UL = invcoF + eye3 * (alpha ** 2) * inv_oriVar_square
+            UR = eye3 * alpha * (1 - alpha) * inv_oriVar_square
+            DL = UR  # Same as UR because of symmetry
+            DR = invcoB + eye3 * ((1 - alpha) ** 2) * inv_oriVar_square
+            A = np.block([[UL, UR], [DL, DR]])
+            BU = np.dot(invcoF, Fmean) + C * alpha * inv_oriVar_square
+            BD = np.dot(invcoB, Bmean) + C * (1 - alpha) * inv_oriVar_square
+            B = np.concatenate([BU, BD])
+            x = np.linalg.solve(A, B)
+            tempF = x[:3]
+            tempB = x[3:]
+            alpha = np.dot((C - tempB), (tempF - tempB)) / np.linalg.norm(tempF - tempB) ** 2
+            
+            # Break if change in alpha is small
+            if abs(preAlpha - alpha) < 0.0001:
+                break
+            preAlpha = alpha
+        
+        unknownF[a, b, :] = tempF
+        unknownB[a, b, :] = tempB
+        unknownAlpha[a, b] = alpha
     
     return unknownAlpha, unknownF, unknownB
 
