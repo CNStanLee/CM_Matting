@@ -8,6 +8,7 @@ import os
 import tracemalloc
 from PIL import Image
 from math import log10, sqrt
+from tqdm import tqdm
 
 # ------------- function define  ---------------------- #
 def compute_mean_cov(frontImg, backImg, unknownImg, width, height):
@@ -98,7 +99,7 @@ def update_alpha(unknownImg, triMap, Fmean, Bmean, coF, coB, oriVar, Iteration, 
     # Only work on unknown pixels
     unknown_pixels = np.nonzero((triMap > 0.95) & (triMap < 0.05))
  
-    for a, b in zip(*unknown_pixels):
+    for a, b in tqdm(zip(*unknown_pixels)):
         # Initialize alpha based on the trimap
         alpha = unknownAlpha[a, b]
         preAlpha = alpha

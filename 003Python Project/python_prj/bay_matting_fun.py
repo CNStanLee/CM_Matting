@@ -8,6 +8,7 @@ import os
 import tracemalloc
 from PIL import Image
 from math import log10, sqrt
+from tqdm import tqdm
 
 # ------------- function define  ---------------------- #
 def compute_mean_cov(frontImg, backImg, unknownImg, width, height):
