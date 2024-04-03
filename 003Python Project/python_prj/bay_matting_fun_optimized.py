@@ -97,7 +97,7 @@ def update_alpha(unknownImg, triMap, Fmean, Bmean, coF, coB, oriVar, Iteration, 
     eye3 = np.eye(3)
     
     # Only work on unknown pixels
-    unknown_pixels = np.nonzero((triMap > 0.95) & (triMap < 0.05))
+    unknown_pixels = np.nonzero((triMap < 0.95) & (triMap > 0.05))
  
     for a, b in tqdm(zip(*unknown_pixels)):
         # Initialize alpha based on the trimap
