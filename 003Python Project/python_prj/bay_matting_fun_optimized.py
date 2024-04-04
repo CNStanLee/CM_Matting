@@ -97,7 +97,10 @@ def update_alpha(unknownImg, triMap, Fmean, Bmean, coF, coB, oriVar, Iteration, 
     eye3 = np.eye(3)
     
     # Only work on unknown pixels
-    unknown_pixels = np.nonzero((triMap < 0.95) & (triMap > 0.05))
+    FThreshold = 255 * 0.95  # 对应于前景阈值
+    BThreshold = 255 * 0.05  # 对应于背景阈值
+
+    unknown_pixels = np.nonzero((triMap > BThreshold) & (triMap < FThreshold))
  
     for a, b in tqdm(zip(*unknown_pixels)):
         # Initialize alpha based on the trimap
@@ -149,8 +152,8 @@ def bayesian_matting(image_path, trimap_path, oriVar=8, Iteration=10):
     if oriImg is None or triMap is None:
         raise ValueError("Image or trimap path is invalid.")
 
-    FThreshold = 255 * 0.95
-    BThreshold = 255 * 0.05
+    FThreshold = 255 * 0.99
+    BThreshold = 255 * 0.01
     width, height = triMap.shape
 
     triMap_expanded = np.expand_dims(triMap, axis=-1)
