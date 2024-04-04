@@ -2,8 +2,8 @@
  * @Author: Changhongli lic9@tcd.com
  * @Date: 2024-01-25 17:08:28
  * @LastEditors: Changhongli lic9@tcd.com
- * @LastEditTime: 2024-03-13 21:15:15
- * @FilePath: /003Python Project/README.md
+ * @LastEditTime: 2024-04-04 14:37:59
+ * @FilePath: /CM_Matting/003Python Project/README.md
  * @Description: 
  * 
 -->
@@ -40,4 +40,5 @@ Change the parameter in the input field
     conda activate dl
     python bay_matting_unitest.py
   ```
-## Evaluate the Performance(in progress)
+## Evaluate the Performance and Run the program
+run the bay_matting_demo_dltrimap.ipynb notebook
